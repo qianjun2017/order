@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cc.lottery.dao.LotteryDao">
+
+	<select id="queryLotteryList" resultType="com.cc.lottery.result.LotteryListResult" parameterType="com.cc.lottery.form.LotteryQueryForm" statementType="PREPARED">
+		select l.id, l.customerId,c.openid,c.nickName,l.status,l.no,l.createTime,l.share
+		from t_lottery l
+		left join t_customer c on c.id = l.customerId
+		<where>
+			<if test="retailerId!=null">
+				and l.customerId = #{retailerId}
+			</if>
+			<if test="lotteryId!=null">
+				and l.id = #{lotteryId}
+			</if>
+			<if test="retailerOpenid!=null and retailerOpenid!=''">
+				and c.openid = #{retailerOpenid}
+			</if>
+			<if test="nickName!=null and nickName!=''">
+				and c.nickName like concat('%',#{nickName},'%')
+			</if>
+			<if test="status!=null and status!=''">
+				and l.status = #{status}
+			</if>
+			<if test="createTimeStart!=null">
+				<![CDATA[ and l.createTime >= #{createTimeStart} ]]>
+			</if>
+			<if test="createTimeEnd!=null">
+				<![CDATA[ and l.createTime <= #{createTimeEnd} ]]>
+			</if>
+			<if test="share">
+				and l.share = ${share}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryLotteryCustomerList" resultType="com.cc.lottery.result.LotteryCustomerListResult" parameterType="com.cc.lottery.form.LotteryCustomerQueryForm" statementType="PREPARED">
+		select lc.id, lc.customerId,c.openid,c.nickName,lc.status,lp.name,l.no,lc.createTime,lc.lotteryId,lc.lotteryPrizeId,lc.exchangeTime,r.phone,r.store,r.address,lc.prize,lc.share,l.share as needShare
+		from t_lottery_customer lc
+		left join t_customer c on c.id = lc.customerId
+		left join t_lottery_prize lp on lp.id = lc.lotteryPrizeId
+		left join t_lottery l on l.id = lc.lotteryId
+		left join t_customer r on r.id = l.customerId
+		<where>
+		<if test="lotteryId!=null">
+				and lc.lotteryId = #{lotteryId}
+			</if>
+			<if test="customerId!=null">
+				and lc.customerId = #{customerId}
+			</if>
+			<if test="customerOpenid!=null and customerOpenid!=''">
+				and c.openid = #{customerOpenid}
+			</if>
+			<if test="retailerId!=null">
+				and l.customerId = #{retailerId}
+			</if>
+			<if test="retailerOpenid!=null and retailerOpenid!=''">
+				and r.openid = #{retailerOpenid}
+			</if>
+			<if test="nickName!=null and nickName!=''">
+				and c.nickName like concat('%',#{nickName},'%')
+			</if>
+			<if test="status!=null and status!=''">
+				and lc.status = #{status}
+			</if>
+			<if test="prize">
+				and lc.prize = ${prize}
+			</if>
+		</where>
+	</select>
+	
+</mapper>
