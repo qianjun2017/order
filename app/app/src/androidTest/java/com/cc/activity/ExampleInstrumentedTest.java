@@ -1,4 +1,4 @@
-package com.cc.notification;
+package com.cc.activity;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
