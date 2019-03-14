@@ -61,11 +61,15 @@ public class MainActivity extends TopBarBaseActivity {
     }
 
     public void save(View view){
-        SparseBooleanArray checkedApps = listView.getCheckedItemPositions();
-        for(int i = 0; i < checkedApps.size(); i ++){
-            Boolean checked = checkedApps.valueAt(i);
-            if(checked){
-                appList.get(i).setMonitor(Boolean.TRUE);
+        SparseBooleanArray checkedItemIds = listView.getCheckedItemPositions();
+        for(int i = 0; i < checkedItemIds.size(); i ++){
+            int key = checkedItemIds.keyAt(i);
+            App app = appList.get(key);
+            Boolean value = checkedItemIds.valueAt(i);
+            if(value){
+                app.setMonitor(Boolean.TRUE);
+            }else{
+                app.setMonitor(Boolean.FALSE);
             }
         }
         StringBuffer buffer = new StringBuffer("当前监控通知：");
