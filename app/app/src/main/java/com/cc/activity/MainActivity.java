@@ -1,12 +1,14 @@
 package com.cc.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.cc.bean.App;
 
@@ -38,17 +40,17 @@ public class MainActivity extends TopBarBaseActivity {
         wechat.setMonitor(Boolean.FALSE);
         appList.add(wechat);
         listView = findViewById(R.id.app_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, appList.stream().map(app->app.getName()).collect(Collectors.toList()).toArray(new String[0]));
-        listView.setAdapter(adapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.app_list_item_multiple_choice, appList.stream().map(app->app.getName()).collect(Collectors.toList()).toArray(new String[0])){
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            public View getView(int position, View convertView, ViewGroup parent) {
+                CheckedTextView checkedTextView = (CheckedTextView)super.getView(position, convertView, parent);
+                return checkedTextView;
             }
-
+        };
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });
@@ -72,13 +74,13 @@ public class MainActivity extends TopBarBaseActivity {
                 app.setMonitor(Boolean.FALSE);
             }
         }
-        StringBuffer buffer = new StringBuffer("当前监控通知：");
+        StringBuffer buffer = new StringBuffer();
         for (App app: appList){
             if(app.getMonitor()){
-                buffer.append(app.getName());
+                buffer.append(app.getName()+"、");
             }
         }
-        Toast.makeText(getApplicationContext(), buffer.substring(0), Toast.LENGTH_SHORT).show();
+        Log.v("提交监控通知对象设置", buffer.length()>0 ? buffer.substring(0, buffer.length()-1): "暂无监控通知对象");
     }
 
 }
