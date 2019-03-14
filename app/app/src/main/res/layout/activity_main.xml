@@ -14,5 +14,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="保  存"/>
+        android:text="保  存"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:onClick="save"/>
 </LinearLayout>
