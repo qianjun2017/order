@@ -1,6 +1,8 @@
 package com.cc.bean;
 
-public class App {
+import java.io.Serializable;
+
+public class App implements Serializable {
 
     /**
      * 应用中文名
@@ -10,7 +12,7 @@ public class App {
     /**
      * 应用包
      */
-    private String packge;
+    private String packageName;
 
     /**
      * 是否监听
@@ -25,12 +27,12 @@ public class App {
         this.name = name;
     }
 
-    public String getPackge() {
-        return packge;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setPackge(String packge) {
-        this.packge = packge;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public Boolean getMonitor() {
@@ -39,5 +41,14 @@ public class App {
 
     public void setMonitor(Boolean monitor) {
         this.monitor = monitor;
+    }
+
+    @Override
+    public String toString() {
+        return "App{" +
+                "name='" + name + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", monitor=" + monitor +
+                '}';
     }
 }
