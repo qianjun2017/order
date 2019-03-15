@@ -35,6 +35,7 @@ public class NotificationCollectorService extends NotificationListenerService {
             String title = extras.getString(Notification.EXTRA_TITLE);
             String content = extras.getString(Notification.EXTRA_TEXT);
             String packageName = sbn.getPackageName();
+            Log.v("监听通知服务", "通知标题："+title+"，通知内容："+content+"，通知对象："+packageName);
             for(App app: appList){
                 if(app.getPackageName().equalsIgnoreCase(packageName)){
                     break;
