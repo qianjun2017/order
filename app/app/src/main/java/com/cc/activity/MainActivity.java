@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,13 +93,6 @@ public class MainActivity extends TopBarBaseActivity {
                 app.setMonitor(Boolean.FALSE);
             }
         }
-        StringBuffer buffer = new StringBuffer();
-        for (App app: appList) {
-            if (app.getMonitor()) {
-                buffer.append(app.getName() + "、");
-            }
-        }
-        Log.v("提交监控通知对象设置", buffer.length()>0 ? buffer.substring(0, buffer.length()-1): "暂无监控通知对象");
         store(appList);
         if(!isNotificationListenerEnabled(this)){
             openNotificationListenSettings();
