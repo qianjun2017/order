@@ -1,15 +1,11 @@
 package com.cc.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,44 +93,11 @@ public class MainActivity extends TopBarBaseActivity {
                 app.setMonitor(Boolean.FALSE);
             }
         }
-        StringBuffer buffer = new StringBuffer();
-        for (App app: appList) {
-            if (app.getMonitor()) {
-                buffer.append(app.getName() + "、");
-            }
-        }
-        Log.v("提交监控通知对象设置", buffer.length()>0 ? buffer.substring(0, buffer.length()-1): "暂无监控通知对象");
         store(appList);
         if(!isNotificationListenerEnabled(this)){
             openNotificationListenSettings();
         }
         toggleNotificationListenerService();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendNotification();
-            }
-        }).start();
-    }
-
-    private void sendNotification() {
-        try {
-            Thread.sleep(5000);
-            NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent intent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            Notification.Builder builder = new Notification.Builder(this);
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-            builder.setTicker("你有一条新的消息");
-            builder.setWhen(System.currentTimeMillis());
-            builder.setContentTitle("MIT");
-            builder.setContentText("测试消息");
-            builder.setContentIntent(pendingIntent);
-            Notification notification = builder.build();
-            mNotificationManager.notify(1, notification);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
