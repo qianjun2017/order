@@ -4,8 +4,9 @@ import com.cc.common.exception.LogicException;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
-import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -29,7 +30,7 @@ public class AESTools {
             return null;
         }
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             IvParameterSpec iv = new IvParameterSpec(key.getBytes(Charset.forName("UTF-8")));
             cipher.init(Cipher.ENCRYPT_MODE, getSecurekey(key), iv);
             byte[] result = cipher.doFinal(content.getBytes(Charset.forName("UTF-8")));
@@ -69,7 +70,7 @@ public class AESTools {
             return null;
         }
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             IvParameterSpec iv = new IvParameterSpec(key.getBytes(Charset.forName("UTF-8")));
             cipher.init(Cipher.DECRYPT_MODE, getSecurekey(key), iv);
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
@@ -99,9 +100,7 @@ public class AESTools {
     }
 
     private static SecretKey getSecurekey(String key) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
-        DESKeySpec desKey = new DESKeySpec(key.getBytes(Charset.forName("UTF-8")));
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("AES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        return securekey;
+        SecretKeySpec keyspec = new SecretKeySpec(key.getBytes(Charset.forName("UTF-8")), "AES");
+        return keyspec;
     }
 }
