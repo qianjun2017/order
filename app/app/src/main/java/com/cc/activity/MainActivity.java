@@ -1,5 +1,8 @@
 package com.cc.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -106,6 +109,32 @@ public class MainActivity extends TopBarBaseActivity {
             openNotificationListenSettings();
         }
         toggleNotificationListenerService();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendNotification();
+            }
+        }).start();
+    }
+
+    private void sendNotification() {
+        try {
+            Thread.sleep(5000);
+            NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            Notification.Builder builder = new Notification.Builder(this);
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+            builder.setTicker("你有一条新的消息");
+            builder.setWhen(System.currentTimeMillis());
+            builder.setContentTitle("MIT");
+            builder.setContentText("测试消息");
+            builder.setContentIntent(pendingIntent);
+            Notification notification = builder.build();
+            mNotificationManager.notify(1, notification);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
